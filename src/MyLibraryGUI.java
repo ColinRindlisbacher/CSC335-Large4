@@ -13,30 +13,37 @@
 import java.lang.ModuleLayer.Controller;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.text.View;
 
- public class MyLibrary extends JFrame{
+ public class MyLibraryGUI extends JFrame{
  
 	private LibraryController controller;
+	private JPanel panel;
 	
 	
-	public MyLibrary() {
+	public MyLibraryGUI() {
 		this.controller = new LibraryController();
 		this.setTitle("CroRind Library");
-		this.setSize(500,500);
+		this.setSize(750,500);
 		this.setUp();
 	}
 	
 	private void setUp() {
-		JPanel panel = new JPanel();
+		panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		JLabel welcomeLabel = new JLabel("Welcome to the CroRind Library!");
 
 		panel.add(welcomeLabel);
@@ -54,8 +61,29 @@ import javax.swing.text.View;
 		this.setVisible(true);
 	}
 	
+	public void start() {
+		ArrayList<JRadioButton> JRadioButtons = new ArrayList<JRadioButton>();
+		JRadioButtons.add(new JRadioButton("Search"));
+		JRadioButtons.add(new JRadioButton("Add A Book"));
+		JRadioButtons.add(new JRadioButton("Set To Read"));
+		JRadioButtons.add(new JRadioButton("Rate A Book"));
+		JRadioButtons.add(new JRadioButton("Get List of Books"));
+		JRadioButtons.add(new JRadioButton("Get Suggestion"));
+		JRadioButtons.add(new JRadioButton("Add Book File"));
+
+		ButtonGroup G = new ButtonGroup();
+
+		for(JRadioButton currButton: JRadioButtons) {
+			panel.add(currButton);
+			G.add(currButton);
+		}
+
+	}
+
 	public static void main(String[] args) {
-		MyLibrary myLib = new MyLibrary();
+		MyLibraryGUI myLib = new MyLibraryGUI();
+		myLib.start();
+		myLib.setVisible(true);
 	}
  
  }
