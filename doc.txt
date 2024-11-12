@@ -1,0 +1,81 @@
+File: doc.txt
+Authors: AJ Cronin and Colin Rindlisbacher
+Usernames: ajcronin  | ckrindlisbacher
+Large Assignment 2 CSC 335
+
+---------------------------------------------
+Classes: 
+
+MyLibrary- This class serves as the view/UI for this project. It contains the main loop where users 
+get to interact until they press 'q' or 'Q' to quit. This class uses a switch statement to decide which
+option the user selected and then calls the appropriate method within MyLibrary which will then do input
+validation and call a related method in LibraryController to allow the behind the scenes work and calculations
+to be done.
+
+LibraryController- This class serves as the controller that the view calls. The class itself creates a Librarian 
+class and calls the related methods in Librarian. 
+
+Librarian- This class serves as the model for the project. All of the inner workings beyond the UI flow through 
+this class. Our data structures we use are created and interacted with in this class.
+
+Book- This class Book represents Book objects that contain a title and author that gets stored in our Library. 
+This is an immutable class as after it is created there are no ways of altering it.
+
+AuthorComparator- This class is used as a Comparator to compare authors of Books to be used when sorting.
+
+TitleComparator- This class is used as a Comparator to compare titles of Books to be used when sorting.
+
+Rating- Class that represents possibleinteger ratings 1 - 5, was created to avoid Primitive Obsession.
+
+ReadBooks- This class represents a list of books that have been labeled as 'read' by the user.
+
+RatedBooks- This class represents a list of books that have been rated by the user.
+
+---------------------------------------------
+Interfaces:
+
+There are 2 instances where we used interfaces which is the AuthorComparator and TitleComparator implement
+the Comparator interface.
+
+---------------------------------------------
+Library classes: 
+
+java.util.ArrayList- So we can use ArrayLists.
+
+java.util.Scanner- Scanner is used to take it user input.
+
+java.io.File and java.io.FileNotFoundException- are used when reading in a file to store into the library.
+
+java.util.Collections- is used to sort and shuffle the ArrayLists
+
+java.util.HashMap- So we can use HashMaps.
+
+java.util.Comparator- Is used to for the compareTo methods for Author and Title Comparators.
+
+---------------------------------------------
+Data Structures:
+ArrayList- ArrayLists are used in many instances in this project to hold Book objects. In other instances
+such as in search in MyLibrary, is used for input validation by holding strings and  using .contains.
+ArrayLists are efficient and mutable so they were a good choice to use to store and interact with lists of
+books.
+
+HashMap- HashMaps are used to keep a mapping of Books to a Rating or to a flag of read or unread.
+
+---------------------------------------------
+Design Patterns:
+MVC- We use Model View Controller design pattern. We have MyLibrary as the view that is the UI that the user
+sees and interacts with, LibraryController as the Controller which calls the Model, which manipulates the data
+and updates the view.
+
+Strategy- We used the Strategy pattern by defining a family of classes, in this case the AuthorComparator and 
+TitleComparator, and made them interchangeable when comparing or sorting Books. 
+
+AntiPatterns avoided:
+Primitive Obsession- Using the Ratings as a separate class rather than just an integer is our way of avoiding 
+Primitive Obsession.
+
+Inappropriate Intimacy- We avoided Inappropriate Intimacy by not automatically using getters AND setters, which 
+is shown in the Book class which we wanted to be immutable.
+
+
+
