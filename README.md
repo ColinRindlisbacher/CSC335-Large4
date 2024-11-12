@@ -1,2 +1,2 @@
-# CSC335-Large2
- Design and implement a system for keeping track of a personal library
+# CSC335-Large4
+ Design and implement a GUI system for keeping track of a personal library
