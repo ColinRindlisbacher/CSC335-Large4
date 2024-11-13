@@ -10,28 +10,33 @@
  * our methods could be called and therefore have no access to the controller/model.
  */
 
-import java.lang.ModuleLayer.Controller;
+//import java.lang.ModuleLayer.Controller;
 import java.util.ArrayList;
-import java.util.Scanner;
-import java.util.ArrayList;
-
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+
+import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
-import javax.swing.text.View;
+import javax.swing.JSplitPane;
+import javax.swing.JTextField;
 
  public class MyLibraryGUI extends JFrame{
  
 	private LibraryController controller;
-	private JPanel panel;
+	private JPanel optionsPanel;
+	private JPanel displayPanel;
+	private JSplitPane splitPane;
 	
 	
 	public MyLibraryGUI() {
@@ -42,14 +47,29 @@ import javax.swing.text.View;
 	}
 	
 	private void setUp() {
-		panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		optionsPanel = new JPanel();
+		optionsPanel.setLayout(new BoxLayout(optionsPanel, BoxLayout.Y_AXIS));
 		JLabel welcomeLabel = new JLabel("Welcome to the CroRind Library!");
 
-		panel.add(welcomeLabel);
+		optionsPanel.add(welcomeLabel);
 		JLabel optionsLabel = new JLabel("Please choose from one of the below options:");
-		panel.add(optionsLabel);
-		this.add(panel);
+		optionsPanel.add(optionsLabel);
+		//this.add(optionsPanel);
+
+		displayPanel = new JPanel();
+        displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
+
+        // Create a JSplitPane to divide the options panel and display panel
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, optionsPanel, displayPanel);
+        splitPane.setDividerLocation(275); // Set initial divider position
+        splitPane.setResizeWeight(0.3); // Allocate space for the left panel
+        splitPane.setContinuousLayout(true);
+
+        // Add the split pane to the frame
+        this.add(splitPane);
+
+        // End the program when the window is closed
+        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// ends the program when window is closed
 		this.addWindowListener(new WindowAdapter() {
@@ -74,11 +94,120 @@ import javax.swing.text.View;
 		ButtonGroup G = new ButtonGroup();
 
 		for(JRadioButton currButton: JRadioButtons) {
-			panel.add(currButton);
+			optionsPanel.add(currButton);
 			G.add(currButton);
 		}
 
+		// Should we have a switch case? I have it not for now but think bout it
+
+		// Add functionality to "Add A Book" button
+        JRadioButtons.get(1).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                displayAddBookForm();
+            }
+        });
+
+		JRadioButtons.get(6).addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e){
+				displayAddBookFileForm();
+			}
+		});
+
 	}
+
+	/*
+	 * I sort of have questions about input validation/error checking.
+	 * Does error checking need to happen/show up in the GUI or is handing
+	 * it in the terminal okay? addBooks just gets a filename and the Librarian
+	 * addBooks handles the filenotfound but that prints to the terminal.. is that
+	 * Okay or does the error checking need to happen here so that we can print
+	 * error messages in the GUI? Other classes have input validation in MyLibraryText
+	 */
+
+	private void displayAddBookFileForm(){
+		// Clear the display panel
+		displayPanel.removeAll();
+
+		// Add filename prompt and text field
+		JLabel fileNameLabel = new JLabel("Please enter file name:");
+		JTextField fileNameField = new JTextField(20);
+		fileNameField.setMaximumSize(new Dimension(300, 25));
+		displayPanel.add(fileNameLabel);
+		displayPanel.add(fileNameField);
+
+		// Add a submit button
+        JButton addFileButton = new JButton("Add File");
+        displayPanel.add(addFileButton);
+
+		// Add functionality to the submit button
+        addFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String fileName = fileNameField.getText();
+                JOptionPane.showMessageDialog(
+                    displayPanel,
+                    "Attempting to add book file, " + fileName + " to Library.",
+					"Book file added.",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+                // Add book file to Library
+				controller.addBooks(fileName);
+            }
+        });
+
+        // Refresh the display panel to show the new components
+        displayPanel.revalidate();
+        displayPanel.repaint();
+
+		
+	}
+
+	private void displayAddBookForm() {
+        // Clear the display panel
+        displayPanel.removeAll();
+
+        // Add title prompt and text field
+        JLabel titleLabel = new JLabel("Please enter the title of the book to be added:");
+        JTextField titleField = new JTextField(20);
+		titleField.setMaximumSize(new Dimension(300, 25));
+        displayPanel.add(titleLabel);
+        displayPanel.add(titleField);
+
+        // Add author prompt and text field
+        JLabel authorLabel = new JLabel("Please enter the author of the book to be added:");
+        JTextField authorField = new JTextField(20);
+		authorField.setMaximumSize(new Dimension(300, 25));
+        displayPanel.add(authorLabel);
+        displayPanel.add(authorField);
+
+        // Add a submit button
+        JButton addButton = new JButton("Add Book");
+        displayPanel.add(addButton);
+
+        // Add functionality to the submit button
+        addButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String title = titleField.getText();
+                String author = authorField.getText();
+                JOptionPane.showMessageDialog(
+                    displayPanel,
+                    "Book added:\nTitle: " + title + "\nAuthor: " + author,
+                    "Book Added",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+                // Add book to Library
+				Book newBook = new Book(title, author);
+				controller.addBook(newBook);
+            }
+        });
+
+        // Refresh the display panel to show the new components
+        displayPanel.revalidate();
+        displayPanel.repaint();
+    }
 
 	public static void main(String[] args) {
 		MyLibraryGUI myLib = new MyLibraryGUI();
