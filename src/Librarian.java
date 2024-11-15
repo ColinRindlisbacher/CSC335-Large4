@@ -184,6 +184,7 @@ public class Librarian {
      */
     public Book suggestRead() {
         ArrayList<Book> suggestions = new ArrayList<Book>(allBooks);
+        if (suggestions.isEmpty()) return null;
         // Make a copy and shuffle the copy and pick the first book.
         Collections.shuffle(suggestions);
         int i = 0;
