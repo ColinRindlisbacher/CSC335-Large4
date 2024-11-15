@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import java.io.FileNotFoundException;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -149,19 +149,33 @@ import javax.swing.JTextField;
                 JOptionPane.showMessageDialog(
                     displayPanel,
                     "Attempting to add book file, " + fileName + " to Library.",
-					"Book file added.",
+					"Book file add attempt",
                     JOptionPane.INFORMATION_MESSAGE
                 );
                 // Add book file to Library
-				controller.addBooks(fileName);
+				try {
+					controller.addBooks(fileName);
+					JOptionPane.showMessageDialog(
+                    displayPanel,
+                    "Successfully added, " + fileName + " to Library.",
+					"Book file added",
+                    JOptionPane.INFORMATION_MESSAGE
+                );
+				} catch (FileNotFoundException f) {
+					// Display error message
+					JOptionPane.showMessageDialog(
+                    displayPanel,
+                    "Error File not found: " + fileName,
+					"File Error",
+                    JOptionPane.ERROR_MESSAGE
+                );
+				}
             }
         });
 
         // Refresh the display panel to show the new components
         displayPanel.revalidate();
         displayPanel.repaint();
-
-		
 	}
 
 	private void displayAddBookForm() {

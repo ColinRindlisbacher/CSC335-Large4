@@ -10,7 +10,8 @@
  * our methods could be called and therefore have no access to the controller/model.
  */
 
- import java.util.ArrayList;
+ import java.io.FileNotFoundException;
+import java.util.ArrayList;
  import java.util.Scanner;
  
   public class MyLibraryText {
@@ -152,7 +153,13 @@
          System.out.println("Please enter file name:");
          String fileName = s.nextLine();
  
-         libCon.addBooks(fileName);
+         try {
+            libCon.addBooks(fileName);
+            System.out.println("Added books from file: " + fileName);
+         } catch (FileNotFoundException e) {
+            System.out.println("Error: File not found: " + fileName);
+         }
+         
      }
  
      private static void searchPrompt(Scanner s, LibraryController libCon) {

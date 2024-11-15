@@ -204,9 +204,10 @@ public class Librarian {
 
     /**
      * @param fileName = name of txt file to be read in
+     * 
+     * @throws FileNotFoundException if the txt file cannot be found
      */
-    public void addBooks(String fileName) {
-        try {
+    public void addBooks(String fileName) throws FileNotFoundException{
 			File file = new File(fileName);
 			Scanner fiScanner = new Scanner(file);
 						
@@ -222,8 +223,5 @@ public class Librarian {
 			    }
 			}
 			fiScanner.close();
-		} catch (FileNotFoundException e) {
-			System.out.println("File not found: " + fileName);
-		}
     }
 }

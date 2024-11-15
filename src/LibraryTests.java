@@ -2,6 +2,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 import org.junit.jupiter.api.Test;
+
+import java.io.FileNotFoundException;
 import java.util.HashMap;
 
 class LibraryTests {
@@ -204,21 +206,21 @@ class LibraryTests {
 	}
 
 	@Test
-	void testAddBooksFromFile() {
+	void testAddBooksFromFile() throws FileNotFoundException{
 		myLib.addBooks("books3.txt");
 		assertEquals(myLib.getBooks("title"), "Cold and Inhospitable : Shiv Roy\n"
 				+ "Gregxit : Cousin Greg\n");
 	}
 	
 	@Test
-	void testAddBooksFromFile_InvalidBook() {
+	void testAddBooksFromFile_InvalidBook() throws FileNotFoundException{
 		myLib.addBooks("badBooks.txt");
 		assertEquals(myLib.getBooks("title"), "");
 	}
 	
 	@Test
-	void testAddBooksFromFile_FileDoesNotExist() {
-		myLib.addBooks("books4.txt");
+	void testAddBooksFromFile_FileDoesNotExist() throws FileNotFoundException{
+		assertThrows(FileNotFoundException.class, () -> myLib.addBooks("books4.txt"));
 		assertEquals(myLib.getBooks("title"), "");
 	}
 	
