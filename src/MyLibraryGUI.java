@@ -56,7 +56,6 @@ import javax.swing.JTextField;
 		optionsPanel.add(welcomeLabel);
 		JLabel optionsLabel = new JLabel("Please choose from one of the below options:");
 		optionsPanel.add(optionsLabel);
-		//this.add(optionsPanel);
 
 		displayPanel = new JPanel();
         displayPanel.setLayout(new BoxLayout(displayPanel, BoxLayout.Y_AXIS));
@@ -69,9 +68,6 @@ import javax.swing.JTextField;
 
         // Add the split pane to the frame
         this.add(splitPane);
-
-        // End the program when the window is closed
-        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// ends the program when window is closed
 		this.addWindowListener(new WindowAdapter() {
@@ -100,10 +96,10 @@ import javax.swing.JTextField;
 			G.add(currButton);
 		}
 
-		// Should we have a switch case? I have it not for now but think bout it
+		// Should we have a switch case for this? I think it could look a lot nicer
 
-		// Add functionality to "Add A Book" button
-
+		
+		// Add functionality to "Search" button
 		JRadioButtons.get(0).addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -111,6 +107,7 @@ import javax.swing.JTextField;
             }
         });
 
+		// Add functionality to "Add A Book" button
         JRadioButtons.get(1).addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -118,6 +115,23 @@ import javax.swing.JTextField;
             }
         });
 
+		// Add functionality to "Set to Read" button
+		JRadioButtons.get(2).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                displaySetReadForm();
+            }
+        });
+
+		// Add functionality to "Rate A Book" button
+		JRadioButtons.get(3).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                displayRateBookForm();
+            }
+        });
+
+		// Add functionality to "Get List of Books" button
 		JRadioButtons.get(4).addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -125,6 +139,7 @@ import javax.swing.JTextField;
             }
         });
 
+		// Add functionality to "Get Suggestion" button
 		JRadioButtons.get(5).addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
@@ -132,13 +147,13 @@ import javax.swing.JTextField;
 			}
 		});
 
+		// Add functionality to "Add Book File" button
 		JRadioButtons.get(6).addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e){
 				displayAddBookFileForm();
 			}
 		});
-
 	}
 
 
@@ -288,14 +303,130 @@ import javax.swing.JTextField;
             }
         });		
 
-
-
 		// Refresh the display panel to show the new components
         displayPanel.revalidate();
         displayPanel.repaint();
 	}
 
-	private void displayAddBookForm() {
+	private void displayRateBookForm(){
+
+		// Clear the display panel
+		displayPanel.removeAll();
+		
+		// Add title prompt and text field
+        JLabel titleLabel = new JLabel("Enter title of book that you want to rate:");
+        JTextField titleField = new JTextField(20);
+		titleField.setMaximumSize(new Dimension(300, 25));
+        displayPanel.add(titleLabel);
+        displayPanel.add(titleField);
+
+        // Add author prompt and text field
+        JLabel authorLabel = new JLabel("Enter the author of book that you want to rate:");
+        JTextField authorField = new JTextField(20);
+		authorField.setMaximumSize(new Dimension(300, 25));
+        displayPanel.add(authorLabel);
+        displayPanel.add(authorField);
+
+		// Add rate prompt and text field
+		JLabel rateLabel = new JLabel("Please enter rating for book(1-5):");
+		JTextField rateField = new JTextField(20);
+		rateField.setMaximumSize(new Dimension(300, 25));
+		displayPanel.add(rateLabel);
+		displayPanel.add(rateField);
+
+		// Add a submit button
+        JButton rateButton = new JButton("Rate Book");
+        displayPanel.add(rateButton);
+
+		// Add functionality to the submit button
+		rateButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String title = titleField.getText();
+				String author = authorField.getText();
+				String rating = rateField.getText();
+
+				// ArrayList to check against if string is 1-5
+				ArrayList<String> range = new ArrayList<String>();
+				range.add("1");
+				range.add("2");
+				range.add("3");
+				range.add("4");
+				range.add("5");
+
+				if(range.contains(rating)){
+					JOptionPane.showMessageDialog(
+						displayPanel,
+						"Book rated:\nTitle: " + title + "\nAuthor: " + author + "\nRating: " + rating,
+						"Book Rated",
+						JOptionPane.INFORMATION_MESSAGE
+					);
+					int r = Integer.parseInt(rating);
+					controller.rate(title, author, r);
+				}
+				else{
+					JOptionPane.showMessageDialog(
+						displayPanel,
+						"Invalid input. Please enter an integer 1-5",
+						"Rating error",
+						JOptionPane.ERROR_MESSAGE
+					);
+				}
+				
+			}
+		});
+		
+		// Refresh the display panel to show the new components
+		displayPanel.revalidate();
+		displayPanel.repaint();
+	}
+
+	private void displaySetReadForm(){
+		// Clear the display panel
+        displayPanel.removeAll();
+
+        // Add title prompt and text field
+        JLabel titleLabel = new JLabel("Enter title of book that you read:");
+        JTextField titleField = new JTextField(20);
+		titleField.setMaximumSize(new Dimension(300, 25));
+        displayPanel.add(titleLabel);
+        displayPanel.add(titleField);
+
+        // Add author prompt and text field
+        JLabel authorLabel = new JLabel("Enter the author of book that you read:");
+        JTextField authorField = new JTextField(20);
+		authorField.setMaximumSize(new Dimension(300, 25));
+        displayPanel.add(authorLabel);
+        displayPanel.add(authorField);
+
+		// Add a submit button
+        JButton addButton = new JButton("Read Book");
+        displayPanel.add(addButton);
+
+		        // Add functionality to the submit button
+		addButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String title = titleField.getText();
+				String author = authorField.getText();
+				JOptionPane.showMessageDialog(
+					displayPanel,
+					"Book read:\nTitle: " + title + "\nAuthor: " + author,
+					"Book Read",
+					JOptionPane.INFORMATION_MESSAGE
+				);
+				// Set book to read
+				controller.setToRead(title, author);
+			}
+		});
+		
+		// Refresh the display panel to show the new components
+		displayPanel.revalidate();
+		displayPanel.repaint();
+
+	}
+
+	private void displayAddBookForm(){
         // Clear the display panel
         displayPanel.removeAll();
 
