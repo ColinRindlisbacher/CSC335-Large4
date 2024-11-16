@@ -104,9 +104,9 @@ class LibraryTests {
 	}
 	
 	@Test
-	void testSearchByInvalidRating() {
+	void testSearchByInvalidRating() throws NumberFormatException{
 		myLib.addBook(b1);
-		assertEquals(myLib.search("rating", "a"), "");
+		assertThrows(NumberFormatException.class, () -> myLib.search("rating", "a"));
 	}
 	
 	@Test
