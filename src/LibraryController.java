@@ -20,7 +20,7 @@ public class LibraryController {
     }
 
 
-    public String search(String method, String search) throws NumberFormatException{
+    public String search(String method, String search){
         return libModel.search(method, search);
     }
 

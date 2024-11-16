@@ -505,10 +505,10 @@ import javax.swing.JTextField;
 				if(method.equalsIgnoreCase("title")  ||
 				   method.equalsIgnoreCase("author") ||
 				   method.equalsIgnoreCase("rating")){
-					try {
-						String bookList = controller.search(method, srch);
+					String bookList = controller.search(method, srch);
+					if(!bookList.equals("Invalid rating input, please enter a number.")) {
 						listArea.setText(bookList);
-					} catch (NumberFormatException f) {
+					} else {
 						JOptionPane.showMessageDialog(
                     		displayPanel,
                     		"Invalid rating input, please enter a number.",

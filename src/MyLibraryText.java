@@ -182,12 +182,7 @@
          System.out.println("Please enter the " + method + " you would like to search");
          search = s.nextLine();	
          System.out.println("Searching for book by "+ method + "...");
-         try {
-            System.out.println(libCon.search(method, search));
-         } catch (NumberFormatException e) {
-            System.out.println("Invalid rating input, please enter a number.");
-         }
-         
+         System.out.println(libCon.search(method, search));
       }
  
      private static void addBookPrompt(Scanner s, LibraryController libCon) {

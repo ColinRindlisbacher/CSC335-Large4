@@ -33,7 +33,7 @@ public class Librarian {
      /**
      * @pre method.equals("title") || method.equals("author") || method.equals("rating")
      */
-    public String search(String method, String search) throws NumberFormatException{
+    public String search(String method, String search){
         // store search results into new ArrayList
         ArrayList<Book> bookResults = new ArrayList<Book>();
 
@@ -54,15 +54,21 @@ public class Librarian {
 
         else if(method.equalsIgnoreCase("rating")){
                 // ratings are stored in hashmap, so grab that to do comparison
-                int rating = Integer.parseInt(search);
-                HashMap<Book, Rating> bookRatings = ratings.getRatings();
+                try{
+                    int rating = Integer.parseInt(search);
+
+                    HashMap<Book, Rating> bookRatings = ratings.getRatings();
     
-                for(Book currBook: allBooks){
-                    Rating currRating = bookRatings.get(currBook);
-                    if(currRating != null && currRating.getRating() == rating){
-                        bookResults.add(currBook);
-                    }
-                }          
+                    for(Book currBook: allBooks){
+                        Rating currRating = bookRatings.get(currBook);
+                        if(currRating != null && currRating.getRating() == rating){
+                            bookResults.add(currBook);
+                        }
+                    }  
+
+                } catch (NumberFormatException e) {
+                    return "Invalid rating input, please enter a number.";
+                }             
             }
         return arrayToString(bookResults, method);
     }
