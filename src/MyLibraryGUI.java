@@ -28,7 +28,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
  public class MyLibraryGUI extends JFrame{
@@ -101,12 +103,34 @@ import javax.swing.JTextField;
 		// Should we have a switch case? I have it not for now but think bout it
 
 		// Add functionality to "Add A Book" button
+
+		JRadioButtons.get(0).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                displaySearchForm();
+            }
+        });
+
         JRadioButtons.get(1).addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 displayAddBookForm();
             }
         });
+
+		JRadioButtons.get(4).addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                displayGetListForm();
+            }
+        });
+
+		JRadioButtons.get(5).addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e){
+				displayBookSuggestionForm();
+			}
+		});
 
 		JRadioButtons.get(6).addActionListener(new ActionListener() {
 			@Override
@@ -117,14 +141,7 @@ import javax.swing.JTextField;
 
 	}
 
-	/*
-	 * I sort of have questions about input validation/error checking.
-	 * Does error checking need to happen/show up in the GUI or is handing
-	 * it in the terminal okay? addBooks just gets a filename and the Librarian
-	 * addBooks handles the filenotfound but that prints to the terminal.. is that
-	 * Okay or does the error checking need to happen here so that we can print
-	 * error messages in the GUI? Other classes have input validation in MyLibraryText
-	 */
+
 
 	private void displayAddBookFileForm(){
 		// Clear the display panel
@@ -137,11 +154,11 @@ import javax.swing.JTextField;
 		displayPanel.add(fileNameLabel);
 		displayPanel.add(fileNameField);
 
-		// Add a submit button
+		// Add an Add File button
         JButton addFileButton = new JButton("Add File");
         displayPanel.add(addFileButton);
 
-		// Add functionality to the submit button
+		// Add functionality to the Add File button
         addFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -174,6 +191,106 @@ import javax.swing.JTextField;
         });
 
         // Refresh the display panel to show the new components
+        displayPanel.revalidate();
+        displayPanel.repaint();
+	}
+
+	private void displayBookSuggestionForm(){
+		// Clear the display panel
+		displayPanel.removeAll();
+
+		JButton suggestButton = new JButton("Get Suggestion");
+		displayPanel.add(suggestButton);
+
+		suggestButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e){
+				Book suggestion = controller.suggestRead();
+				if(suggestion == null){
+					JOptionPane.showMessageDialog(
+                    	displayPanel,
+                    	"You have read all the books!",
+						"No more Books!",
+                    	JOptionPane.INFORMATION_MESSAGE
+                	);
+				}
+				else{
+					// clear panel so we can display book info
+					displayPanel.removeAll();
+					// display book info
+					JPanel bookPanel = new JPanel();
+					bookPanel.setLayout(new BoxLayout(bookPanel, BoxLayout.Y_AXIS));
+
+					JLabel bookIntroLabel = new JLabel("Here is a book suggestion that you haven't read: ");
+					JLabel titleLabel = new JLabel("Title: " + suggestion.getTitle());
+					JLabel authorLabel = new JLabel("Author: " + suggestion.getAuthor());
+
+					bookPanel.add(bookIntroLabel);
+					bookPanel.add(titleLabel);
+					bookPanel.add(authorLabel);
+
+					displayPanel.add(bookPanel);
+					// refresh display to show book suggestion
+					displayPanel.revalidate();
+        			displayPanel.repaint();
+				}
+			}
+		});
+
+		// Refresh the display panel to show the new components
+        displayPanel.revalidate();
+        displayPanel.repaint();
+	}
+
+	private void displayGetListForm(){
+		// Clear the display panel
+        displayPanel.removeAll();
+
+		// Add prompt and text field
+		JLabel sortLabel = new JLabel("Please select what method you would like to sort the books(title,author,read,unread):");
+		JTextField sortField = new JTextField(20);
+		sortField.setMaximumSize(new Dimension(300, 25));
+        displayPanel.add(sortLabel);
+        displayPanel.add(sortField);
+
+		// add area and scroll to display our resulting list
+		JTextArea listArea = new JTextArea(15, 50);
+		listArea.setEditable(false);
+		JScrollPane scrollPane = new JScrollPane(listArea);
+		displayPanel.add(scrollPane);
+
+		// Add a submit button
+        JButton submitButton = new JButton("Submit");
+        displayPanel.add(submitButton);
+
+		submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String method = sortField.getText();
+
+				if(method.equalsIgnoreCase("title")  ||
+				   method.equalsIgnoreCase("author") ||
+				   method.equalsIgnoreCase("read")   ||
+				   method.equalsIgnoreCase("unread")){
+					String bookList = controller.getBooks(method);
+					listArea.setText(bookList);
+				}
+				else{
+					JOptionPane.showMessageDialog(
+                    	displayPanel,
+                    	"Invalid input: " + method +  ", Please enter 'title', 'author', 'read', or 'unread'.",
+						"Error",
+                    	JOptionPane.ERROR_MESSAGE
+                	);
+					// clear text area 
+					listArea.setText("");
+				}
+            }
+        });		
+
+
+
+		// Refresh the display panel to show the new components
         displayPanel.revalidate();
         displayPanel.repaint();
 	}
@@ -222,6 +339,72 @@ import javax.swing.JTextField;
         displayPanel.revalidate();
         displayPanel.repaint();
     }
+
+	private void displaySearchForm(){
+		// Clear the display panel
+		displayPanel.removeAll();
+
+		JLabel searchMethodPrompt = new JLabel("Please enter method of search(title, author, or rating):");
+		JTextField searchMethodField = new JTextField(20);
+		searchMethodField.setMaximumSize(new Dimension(300, 25));
+		displayPanel.add(searchMethodPrompt);
+		displayPanel.add(searchMethodField);
+
+		JLabel search = new JLabel("Please enter what you want to search for:");
+		JTextField searchField = new JTextField(20);
+		searchField.setMaximumSize(new Dimension(300, 25));
+		displayPanel.add(search);
+		displayPanel.add(searchField);
+
+		// add area and scroll to display our resulting list
+		JTextArea listArea = new JTextArea(15, 50);
+		listArea.setEditable(false);
+		JScrollPane scrollPane = new JScrollPane(listArea);
+		displayPanel.add(scrollPane);
+
+		// Add a submit button
+        JButton submitButton = new JButton("Submit");
+        displayPanel.add(submitButton);
+
+		submitButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                String method = searchMethodField.getText();
+				String srch = searchField.getText();
+
+				// check method is valid
+				if(method.equalsIgnoreCase("title")  ||
+				   method.equalsIgnoreCase("author") ||
+				   method.equalsIgnoreCase("rating")){
+					try {
+						String bookList = controller.search(method, srch);
+						listArea.setText(bookList);
+					} catch (NumberFormatException f) {
+						JOptionPane.showMessageDialog(
+                    		displayPanel,
+                    		"Invalid rating input, please enter a number.",
+							"Rating input Error",
+                    		JOptionPane.ERROR_MESSAGE
+                		);
+					}
+				}
+				else{
+					JOptionPane.showMessageDialog(
+                    	displayPanel,
+                    	"Invalid input: " + method +  ", Please enter 'title', 'author', 'rating'.",
+						"Error",
+                    	JOptionPane.ERROR_MESSAGE
+                	);
+					// clear text area 
+					listArea.setText("");
+				}
+            }
+        });
+		
+		// Refresh the display panel to show the new components
+		displayPanel.revalidate();
+        displayPanel.repaint();
+	}
 
 	public static void main(String[] args) {
 		MyLibraryGUI myLib = new MyLibraryGUI();
