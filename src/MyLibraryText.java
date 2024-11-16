@@ -11,7 +11,7 @@
  */
 
  import java.io.FileNotFoundException;
-import java.util.ArrayList;
+ import java.util.ArrayList;
  import java.util.Scanner;
  
   public class MyLibraryText {
@@ -184,7 +184,12 @@ import java.util.ArrayList;
          System.out.println("Please enter the " + method + " you would like to search");
          search = s.nextLine();	
          System.out.println("Searching for book by "+ method + "...");
-         System.out.println(libCon.search(method, search));
+         try {
+            System.out.println(libCon.search(method, search));
+         } catch (NumberFormatException e) {
+            System.out.println("Invalid rating input, please enter a number.");
+         }
+         
       }
  
      private static void addBookPrompt(Scanner s, LibraryController libCon) {
