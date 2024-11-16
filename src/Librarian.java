@@ -202,21 +202,27 @@ public class Librarian {
      * 
      * @throws FileNotFoundException if the txt file cannot be found
      */
-    public void addBooks(String fileName) throws FileNotFoundException{
-			File file = new File(fileName);
-			Scanner fiScanner = new Scanner(file);
-						
-			while(fiScanner.hasNextLine()){
-				String line = fiScanner.nextLine();
-				String[] bookInfo = line.split(";");
-				// make sure line is valid length of 2
-				if(bookInfo.length == 2){
-					String newTitle = bookInfo[0].trim();
-					String newAuthor = bookInfo[1].trim();
-					Book fileBook = new Book(newTitle, newAuthor);
-					addBook(fileBook);
-			    }
-			}
-			fiScanner.close();
+    public boolean addBooks(String fileName){
+            try {
+                File file = new File(fileName);
+                Scanner fiScanner = new Scanner(file);
+                            
+                while(fiScanner.hasNextLine()){
+                    String line = fiScanner.nextLine();
+                    String[] bookInfo = line.split(";");
+                    // make sure line is valid length of 2
+                    if(bookInfo.length == 2){
+                        String newTitle = bookInfo[0].trim();
+                        String newAuthor = bookInfo[1].trim();
+                        Book fileBook = new Book(newTitle, newAuthor);
+                        addBook(fileBook);
+                    }
+                }
+                fiScanner.close();
+                return true;
+            } catch (FileNotFoundException e){
+                return false;
+            }
+			
     }
 }

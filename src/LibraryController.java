@@ -11,7 +11,6 @@
  * our data cannot be corrupted from outside code.
  */
 
-import java.io.FileNotFoundException;
 
 public class LibraryController {
     private Librarian libModel;
@@ -51,8 +50,8 @@ public class LibraryController {
     }
 
 
-    public void addBooks(String fileName) throws FileNotFoundException{
-        libModel.addBooks(fileName);
+    public boolean addBooks(String fileName){
+        return libModel.addBooks(fileName);
     }
 
 }

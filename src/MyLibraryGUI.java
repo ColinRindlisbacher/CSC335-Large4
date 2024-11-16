@@ -15,7 +15,6 @@ import java.util.ArrayList;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.FileNotFoundException;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -185,15 +184,14 @@ import javax.swing.JTextField;
                     JOptionPane.INFORMATION_MESSAGE
                 );
                 // Add book file to Library
-				try {
-					controller.addBooks(fileName);
+				if (controller.addBooks(fileName)){
 					JOptionPane.showMessageDialog(
                     displayPanel,
                     "Successfully added, " + fileName + " to Library.",
 					"Book file added",
                     JOptionPane.INFORMATION_MESSAGE
-                );
-				} catch (FileNotFoundException f) {
+                	);
+				} else {
 					// Display error message
 					JOptionPane.showMessageDialog(
                     displayPanel,
